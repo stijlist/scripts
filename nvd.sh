@@ -1,1 +1,0 @@
-/home/bert/source/nv-shell/nv-dmenu.sh
