@@ -1,0 +1,7 @@
+#! /usr/bin/env ruby
+# find notes/next.taskpaper
+# find first line with leading dash (-)
+# print that line 
+file = "/Users/bert/notes/stack.taskpaper"
+next_task = File.open(file, 'r').detect { |line| line =~ /^-/ and !(line =~ /@done/) }
+puts next_task

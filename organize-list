@@ -1,0 +1,94 @@
+#!/usr/bin/env ruby
+# returns contents of the first @due tag found
+require 'chronic'
+
+def due?(line)
+  line =~ /@due/ and !done?(line)
+end
+def parse_due_date(line)
+  Chronic.parse(line.match(/@due\((.+)\)/)[1])
+end
+def done?(line)
+  # find lines containing a @done tag
+  (line =~ /@done/) != nil
+end
+
+def sort_completed(list_of_todos)
+  completed = list_of_todos.select { |todo| done?(todo) }
+  completed.each do |t|
+    list_of_todos << list_of_todos.delete(t)
+  end
+  list_of_todos
+end
+
+def sort_due(list_of_todos)
+  due = list_of_todos.select { |todo| due?(todo) }
+  header = list_of_todos.first
+  list_of_todos.delete(header)
+  sorted_due = due.sort_by do |item|
+    parse_due_date(item)
+  end
+  [header].concat(sorted_due.concat(list_of_todos.reject { |t| sorted_due.include?(t) }))
+end
+
+def organize(list_of_todos)
+  sort_due(sort_completed(list_of_todos))
+end
+
+if ARGV.length != 0
+  # there has to be a much cleaner way to do this
+  todos = []
+  ARGV.each do |arg|
+    File.open(arg) do |f|
+      while line = f.gets
+        todos << line
+      end
+    end
+    organized = organize(todos)
+    File.open(arg, "w") do |f|
+      organized.each do |t|
+        f.puts(t)
+      end
+    end
+  end
+end
+
+def test_due
+  list = ["header",
+          "calc @due(September 19th)",
+          "more calc @due(September 18th)",
+          "not calc, just stuff",
+          "even more calc @due(September 17th)"]
+  desired_result = [
+          "header",
+          "even more calc @due(September 17th)",
+          "more calc @due(September 18th)",
+          "calc @due(September 19th)",
+          "not calc, just stuff"
+  ]
+  puts list
+  puts "================"
+  puts organize(list)
+  puts "================"
+  puts organize(list) == desired_result
+end
+def test
+  list = ["not done",
+          "also not done",
+          "newly completed @done",
+          "third, not done",
+          "",
+          "done after gap @done",
+          "also done after gap @done"]
+  desired_result = ["not done",
+          "also not done",
+          "third, not done",
+          "",
+          "newly completed @done",
+          "done after gap @done",
+          "also done after gap @done"]
+  puts organize(list)
+  puts desired_result
+  puts organize(list) == desired_result
+end
+# test_due
