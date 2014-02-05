@@ -1,0 +1,6 @@
+#! /bin/bash
+# pops up a prompt with filter-as-you-type search via dmenu on all files in the
+# .notes directory, and opens the selected note in your $EDITOR
+# doesn't yet handle the case where you want to create a new note
+# need to ensure that new notes are also created in the notes directory
+$EDITOR "$(find ~/notes/* | dmenu -l 20)"

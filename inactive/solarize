@@ -1,0 +1,57 @@
+#! /bin/sh
+# a script that switches between solarized light and dark in the framebuffer
+# usage: "solarize light" switches to light theme, "solarize dark" switches
+# to dark theme. any other output reads:
+# "input not recognized. usage 'solarize light' switches to light theme,
+# 'solarize dark' switches to dark theme."
+#to switch from solarized dark to light, reverse all eight base colors
+#dark: sequence: 8-0-10-11-12-14-7-15 
+#light: reverse the sequence; 15-7-14-12-11-10-0-8
+
+# solarize light
+
+if [ "$1" = "light" ] ; then
+    echo -en "\e]PF002b36" #brblack, base03
+    echo -en "\e]P7073642" #black, base02
+    echo -en "\e]PE586e75" #brgreen, base01
+    echo -en "\e]PC657b83" #bryellow, base00
+    echo -en "\e]PB839496" #brblue, base0
+    echo -en "\e]PA93a1a1" #brcyan, base1
+    echo -en "\e]P0eee8d5" #white, base2
+    echo -en "\e]P8fdf6e3" #brwhite, base3
+    echo -en "\e]P3b58900" #yellow
+    echo -en "\e]P9cb4b16" #brred
+    echo -en "\e]P1dc322f" #red
+    echo -en "\e]P5d33682" #magenta
+    echo -en "\e]PD6c71c4" #brmagenta
+    echo -en "\e]P4268bd2" #blue
+    echo -en "\e]P62aa198" #cyan
+    echo -en "\e]P2859900" #green
+    clear #for background artifacting
+fi
+
+# switch colorscheme to solarized dark
+if [ "$1" = "dark" ] ; then
+    echo -en "\e]P8002b36" #brblack, base03
+    echo -en "\e]P0073642" #black, base02
+    echo -en "\e]PA586e75" #brgreen, base01
+    echo -en "\e]PB657b83" #bryellow, base00
+    echo -en "\e]PC839496" #brblue, base0
+    echo -en "\e]PE93a1a1" #brcyan, base1
+    echo -en "\e]P7eee8d5" #white, base2
+    echo -en "\e]PFfdf6e3" #brwhite, base3
+    echo -en "\e]P3b58900" #yellow
+    echo -en "\e]P9cb4b16" #brred
+    echo -en "\e]P1dc322f" #red
+    echo -en "\e]P5d33682" #magenta
+    echo -en "\e]PD6c71c4" #brmagenta
+    echo -en "\e]P4268bd2" #blue
+    echo -en "\e]P62aa198" #cyan
+    echo -en "\e]P2859900" #green
+    clear #for background artifacting
+fi
+
+#if [ "$1" != "dark" && "$1" != "light" ] ; then
+#    echo "input not recognized. usage: 'solarize light' switches to light theme, 'solarize dark' switches to dark theme."
+#fi
+ 
